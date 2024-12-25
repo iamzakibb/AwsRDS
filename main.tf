@@ -9,7 +9,6 @@ module "rds" {
   allocated_storage    = var.allocated_storage
   max_allocated_storage = var.max_allocated_storage
   backup_retention     = var.backup_retention
-  preferred_backup_window = var.preferred_backup_window
   multi_az             = var.multi_az
   monitoring_interval  = var.monitoring_interval
   performance_insights = var.performance_insights
