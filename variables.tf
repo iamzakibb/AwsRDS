@@ -2,6 +2,7 @@
 variable "db_name" {
   description = "The name of the database to create."
   type        = string
+  default = "value"
 }
 
 variable "instance_identifier" {
@@ -18,6 +19,7 @@ variable "engine" {
 variable "engine_version" {
   description = "The engine version to use."
   type        = string
+  default = "16.0"
 }
 
 variable "instance_class" {
@@ -77,12 +79,14 @@ variable "skip_final_snapshot" {
 variable "admin_username" {
   description = "The master username for the database."
   type        = string
+  default = "value"
 }
 
 variable "admin_password" {
   description = "The master password for the database."
   type        = string
   sensitive   = true
+  default = "value"
 }
 
 variable "vpc_security_group_ids" {
