@@ -89,3 +89,11 @@ variable "db_subnet_group_name" {
   description = "A DB subnet group to associate with the RDS instance."
   type        = string
 }
+ 
+variable "backup_window" {
+  type = string  
+}
+variable "maintenance_window" {
+  type = string
+  
+}

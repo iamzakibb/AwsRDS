@@ -16,4 +16,6 @@ resource "aws_db_instance" "this" {
   performance_insights_enabled = var.performance_insights
   deletion_protection    = var.deletion_protection
   skip_final_snapshot    = var.skip_final_snapshot
+  backup_window          = var.backup_window
+  maintenance_window     = var.maintenance_window   
 }

@@ -18,4 +18,6 @@ module "rds" {
   admin_password       = var.admin_password
   vpc_security_group_ids = var.vpc_security_group_ids
   db_subnet_group_name = var.db_subnet_group_name
+  backup_window = var.backup_window
+  maintenance_window = var.maintenance_window
 }
