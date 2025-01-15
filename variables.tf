@@ -81,14 +81,14 @@ variable "skip_final_snapshot" {
 variable "admin_username" {
   description = "The master username for the database."
   type        = string
-  default = "value"
+  default = "admin"
 }
 
 variable "admin_password" {
   description = "The master password for the database."
   type        = string
   sensitive   = true
-  default = "value"
+  default = "appUser"
 }
 
 variable "vpc_security_group_ids" {
@@ -97,11 +97,12 @@ variable "vpc_security_group_ids" {
   default = [ "value" ]
 }
 
-variable "db_subnet_group_name" {
-  description = "A DB subnet group to associate with the RDS instance."
+variable "vpc_id" {
+  description = "VPC ID where the security group will be created"
   type        = string
-  default = "value"
 }
+
+
  variable "backup_window" {
   description = "The daily time range during which backups are created."
   type = string
@@ -110,6 +111,40 @@ variable "db_subnet_group_name" {
  }
  variable "maintenance_window" {
   type = string
-  default = "Mon:03:00-Mon:04:00"
+  default = "sun:05:00-sun:06:00"
    
  }
+variable "security_group_name" {
+  description = "Name of the RDS security group"
+  type        = string
+  default     = "rds-security-group"
+}
+variable "allowed_cidr_blocks" {
+  description = "List of CIDR blocks allowed to access the database"
+  type        = list(string)
+  default     =  ["", ""] # Replace with your trusted CIDR ranges
+}
+variable "tags" {
+  description = "Global tags to apply to all resources"
+  type        = map(string)
+  default     = {
+    "Environment" = "dev"
+    "Owner"       = "team@example.com"
+    "Project"     = "my-rds-project"
+  }
+}
+variable "vpc_id" {
+  description = "The ID of the VPC where the subnets will be created"
+  type        = string
+}
+
+variable "vpc_cidr_block" {
+  description = "The CIDR block of the VPC"
+  type        = string
+  default = "value"
+}
+variable "db_subnet_group_name" {
+  description = "A DB subnet group to associate with the RDS instance."
+  type        = string
+  default = "rds-subnet-group"
+}

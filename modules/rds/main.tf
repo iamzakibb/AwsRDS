@@ -18,4 +18,10 @@ resource "aws_db_instance" "this" {
   skip_final_snapshot    = var.skip_final_snapshot
   backup_window          = var.backup_window
   maintenance_window     = var.maintenance_window   
+   tags = merge(
+    var.tags,
+    {
+      "Name" = var.instance_identifier
+    }
+  )
 }
