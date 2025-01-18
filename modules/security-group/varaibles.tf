@@ -20,3 +20,6 @@ variable "allowed_cidr_blocks" {
   type        = list(string)
   default     = ["192.168.1.0/24"] # Replace with your trusted CIDR ranges
 }
+variable "tags" {
+  
+}

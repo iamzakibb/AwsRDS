@@ -125,17 +125,16 @@ variable "allowed_cidr_blocks" {
   default     =  ["", ""] # Replace with your trusted CIDR ranges
 }
 variable "tags" {
-  description = "Global tags to apply to all resources"
-  type        = map(string)
-  default     = {
-    "Environment" = "dev"
-    "Owner"       = "team@example.com"
-    "Project"     = "my-rds-project"
+  default = {
+    "CI Environment"          = "production" # Change based on your environment
+    "Information Classification" = "confidential"
+    "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
 }
 variable "vpc_id" {
   description = "The ID of the VPC where the subnets will be created"
   type        = string
+  default = "vpc-0f29e4c236e003fb8"
 }
 
 variable "vpc_cidr_block" {
