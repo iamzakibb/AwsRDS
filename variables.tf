@@ -126,7 +126,7 @@ variable "allowed_cidr_blocks" {
 }
 variable "tags" {
   default = {
-    "CI Environment"          = "production" # Change based on your environment
+    "CI Environment"          = "development" # Change based on your environment
     "Information Classification" = "confidential"
     "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
@@ -146,4 +146,8 @@ variable "db_subnet_group_name" {
   description = "A DB subnet group to associate with the RDS instance."
   type        = string
   default = "rds-subnet-group"
+}
+variable "monitoring_role_arn" {
+  type        = string
+  description = "IAM Role ARN for RDS enhanced monitoring"
 }

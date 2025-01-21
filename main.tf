@@ -24,6 +24,7 @@ module "rds" {
   backup_window        = var.backup_window
   maintenance_window   = var.maintenance_window
   tags                 = var.tags
+  monitoring_role_arn = module.rds.monitoring_role_arn
 }
 
 module "rds_security_group" {

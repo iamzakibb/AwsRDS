@@ -102,3 +102,10 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+# variable "performance_insights_kms_key_id" {
+  
+# }
+variable "monitoring_role_arn" {
+  type        = string
+  description = "IAM Role ARN for RDS enhanced monitoring"
+}
