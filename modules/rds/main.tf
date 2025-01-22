@@ -72,14 +72,14 @@ resource "aws_db_instance" "this" {
   multi_az                         = var.multi_az
   monitoring_interval              = var.monitoring_interval
   performance_insights_enabled     = var.performance_insights
-  performance_insights_kms_key_id  = aws_kms_key.key.id
+  performance_insights_kms_key_id  = var.performance_insights_kms_key_id
   deletion_protection              = var.deletion_protection
   skip_final_snapshot              = var.skip_final_snapshot
   backup_window                    = var.backup_window
   maintenance_window               = var.maintenance_window
   enabled_cloudwatch_logs_exports  = ["error", "general", "slowquery", "audit"]
   auto_minor_version_upgrade       = true
-  monitoring_role_arn              = aws_iam_role.rds_monitoring_role.arn
+  monitoring_role_arn              = var.monitoring_role_arn
 
   tags = merge(
     var.tags,

@@ -144,26 +144,27 @@ variable "db_subnet_group_name" {
   type        = string
   default = "rds-subnet-group"
 }
-variable "monitoring_role_arn" {
-  type        = string
-  description = "IAM Role ARN for RDS enhanced monitoring"
-}
-variable "key_use_principals" {
-  description = "AWS principals allowed to use the KMS key"
-  type        = list(string)
-  default     = []
-}
+# variable "monitoring_role_arn" {
+#   type        = string
+#   description = "IAM Role ARN for RDS enhanced monitoring"
+#   default = ""
+# }
+# variable "key_use_principals" {
+#   description = "AWS principals allowed to use the KMS key"
+#   type        = list(string)
+#   default     = []
+# }
 
-variable "key_management_principals" {
-  description = "AWS principals allowed to manage the KMS key"
-  type        = list(string)
-}
+# variable "key_management_principals" {
+#   description = "AWS principals allowed to manage the KMS key"
+#   type        = list(string)
+# }
 variable "kms_key_description" {
-  
+  default = "KMS key for RDS encryption"
 }
-variable "performance_insights_kms_key_id" {
+# variable "performance_insights_kms_key_id" {
   
-}
+# }
 variable "subnet_group_name" {
   default = "rds-subnet-group"
 }

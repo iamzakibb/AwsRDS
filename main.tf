@@ -25,7 +25,9 @@ module "rds" {
   backup_window        = var.backup_window
   description = var.kms_key_description
   maintenance_window   = var.maintenance_window
-  key_use_principals      = [module.rds.rds_monitoring_role_arn] # Add any extra ARNs dynamically
+    key_use_principals = [
+    module.rds.monitoring_role_arn               
+  ]
   key_management_principals = ["arn:aws:iam::123456789012:role/KeyManagerRole"]
   monitoring_role_arn = module.rds.monitoring_role_arn
   tags                 = var.tags

@@ -12,7 +12,7 @@ output "tags" {
   description = "Tags applied to the RDS instance"
   value       = aws_db_instance.rds_instance.tags
 }
-output "rds_monitoring_role_arn" {
+output "monitoring_role_arn" {
   value = aws_iam_role.rds_monitoring_role.arn
 }
 
@@ -20,3 +20,7 @@ output "performance_insights_kms_key_id" {
   value = aws_kms_key.key.id
   description = "The KMS key ID used for performance insights in the RDS instance."
 }
+output "kms_key_arn" {
+  value = aws_kms_key.key.arn
+}
+
