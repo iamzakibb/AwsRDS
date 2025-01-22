@@ -38,7 +38,7 @@ module "rds_security_group" {
   security_group_name = var.security_group_name
   vpc_id              = var.vpc_id # Use the existing VPC ID
   database_port       = 5432
-  allowed_cidr_blocks = var.allowed_cidr_blocks
+  # allowed_cidr_blocks = var.allowed_cidr_blocks
   tags                = var.tags
 }
 

@@ -15,11 +15,11 @@ variable "database_port" {
   default     = 5432
 }
 
-variable "allowed_cidr_blocks" {
-  description = "List of CIDR blocks allowed to access the database"
-  type        = list(string)
-  default     = ["192.168.1.0/24"] # Replace with your trusted CIDR ranges
-}
+# variable "allowed_cidr_blocks" {
+#   description = "List of CIDR blocks allowed to access the database"
+#   type        = list(string)
+#   default     = ["192.168.1.0/24"] # Replace with your trusted CIDR ranges
+# }
 variable "tags" {
   
 }

@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "allow_inbound_db" {
   description       = "Allow inbound traffic to the database" 
 
   # Restrict access to specific IP ranges (replace with trusted CIDRs)
-  cidr_blocks = var.allowed_cidr_blocks
+  cidr_blocks = [data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "allow_outbound_to_vpc" {

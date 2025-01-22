@@ -8,10 +8,11 @@ output "rds_instance_id" {
   description = "The ID of the RDS instance."
   value       = aws_db_instance.this.id
 }
+
 output "tags" {
-  description = "Tags applied to the RDS instance"
-  value       = aws_db_instance.rds_instance.tags
+  value = aws_db_instance.this.tags
 }
+
 output "monitoring_role_arn" {
   value = aws_iam_role.rds_monitoring_role.arn
 }
