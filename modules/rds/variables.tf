@@ -123,10 +123,6 @@ variable "deletion_window_in_days" {
   default     = 30
 }
 
-variable "tags" {
-  description = "Tags for the KMS key"
-  type        = map(string)
-}
 
 variable "key_use_principals" {
   description = "Principals allowed to use the key (e.g., ARNs or services)"

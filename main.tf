@@ -41,7 +41,7 @@ module "rds_security_group" {
 }
 
 module "rds_subnet_group" {
-  source             = "./modules/rds-subnet-grouwith-subnets"
+  source             = "./modules/rds-subnet-group"
   name               = var.subnet_group_name
   vpc_id             = var.vpc_id # Reference existing VPC
   vpc_cidr_block     = data.aws_vpc.selected.cidr_block # Dynamically fetch VPC CIDR block

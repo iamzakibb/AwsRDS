@@ -97,10 +97,7 @@ variable "vpc_security_group_ids" {
   default = [ "value" ]
 }
 
-variable "vpc_id" {
-  description = "VPC ID where the security group will be created"
-  type        = string
-}
+
 
 
  variable "backup_window" {
@@ -131,11 +128,11 @@ variable "tags" {
     "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
 }
-variable "vpc_id" {
-  description = "The ID of the VPC where the subnets will be created"
-  type        = string
-  default = "vpc-0f29e4c236e003fb8"
-}
+# variable "vpc_id" {
+#   description = "The ID of the VPC where the subnets will be created"
+#   type        = string
+#   default = "vpc-0f29e4c236e003fb8"
+# }
 
 variable "vpc_cidr_block" {
   description = "The CIDR block of the VPC"
@@ -166,4 +163,12 @@ variable "kms_key_description" {
 }
 variable "performance_insights_kms_key_id" {
   
+}
+variable "subnet_group_name" {
+  default = "rds-subnet-group"
+}
+variable "vpc_id" {
+  description = "VPC ID where the security group will be created"
+  default ="vpc-0a85f22361b3b7557"
+  type        = string
 }
