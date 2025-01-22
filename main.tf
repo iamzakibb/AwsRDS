@@ -19,12 +19,16 @@ module "rds" {
   skip_final_snapshot  = var.skip_final_snapshot
   admin_username       = var.admin_username
   admin_password       = var.admin_password
+  performance_insights_kms_key_id = module.rds.performance_insights_kms_key_id
   vpc_security_group_ids = [module.rds_security_group.security_group_id]
   db_subnet_group_name = module.rds_subnet_group.name
   backup_window        = var.backup_window
+  description = var.kms_key_description
   maintenance_window   = var.maintenance_window
-  tags                 = var.tags
+  key_use_principals      = [module.rds.rds_monitoring_role_arn] # Add any extra ARNs dynamically
+  key_management_principals = ["arn:aws:iam::123456789012:role/KeyManagerRole"]
   monitoring_role_arn = module.rds.monitoring_role_arn
+  tags                 = var.tags
 }
 
 module "rds_security_group" {

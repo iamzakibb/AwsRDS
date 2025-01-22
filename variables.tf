@@ -151,3 +151,19 @@ variable "monitoring_role_arn" {
   type        = string
   description = "IAM Role ARN for RDS enhanced monitoring"
 }
+variable "key_use_principals" {
+  description = "AWS principals allowed to use the KMS key"
+  type        = list(string)
+  default     = []
+}
+
+variable "key_management_principals" {
+  description = "AWS principals allowed to manage the KMS key"
+  type        = list(string)
+}
+variable "kms_key_description" {
+  
+}
+variable "performance_insights_kms_key_id" {
+  
+}

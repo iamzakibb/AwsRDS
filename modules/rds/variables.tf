@@ -102,10 +102,38 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-# variable "performance_insights_kms_key_id" {
-  
-# }
+
 variable "monitoring_role_arn" {
   type        = string
   description = "IAM Role ARN for RDS enhanced monitoring"
+}
+variable "performance_insights_kms_key_id" {
+  type        = string
+  description = "The ARN of the KMS key to use for Performance Insights data encryption."
+  
+}
+variable "description" {
+  description = "Description of the KMS key"
+  type        = string
+}
+
+variable "deletion_window_in_days" {
+  description = "Number of days before key deletion"
+  type        = number
+  default     = 30
+}
+
+variable "tags" {
+  description = "Tags for the KMS key"
+  type        = map(string)
+}
+
+variable "key_use_principals" {
+  description = "Principals allowed to use the key (e.g., ARNs or services)"
+  type        = list(string)
+}
+
+variable "key_management_principals" {
+  description = "Principals allowed to manage the key (e.g., ARNs or services)"
+  type        = list(string)
 }

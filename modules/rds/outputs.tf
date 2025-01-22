@@ -15,3 +15,8 @@ output "tags" {
 output "rds_monitoring_role_arn" {
   value = aws_iam_role.rds_monitoring_role.arn
 }
+
+output "performance_insights_kms_key_id" {
+  value = aws_kms_key.key.id
+  description = "The KMS key ID used for performance insights in the RDS instance."
+}
