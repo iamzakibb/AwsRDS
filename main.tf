@@ -47,7 +47,7 @@ module "rds_subnet_group" {
   source             = "./modules/rds-subnet-group"
   name               = var.subnet_group_name
   vpc_id             = var.vpc_id # Reference existing VPC
-  vpc_cidr = data.aws_vpc.selected.cidr_block
+  # vpc_cidr = data.aws_vpc.selected.cidr_block
   vpc_cidr_block = data.aws_vpc.selected.cidr_block
   new_subnet_prefix  = 8              # Subnet prefix (adjust to match subnet size)
   subnet_count       = 2              # Create 2 subnets in different AZs
