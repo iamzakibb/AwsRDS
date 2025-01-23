@@ -66,7 +66,11 @@ variable "deletion_protection" {
 variable "skip_final_snapshot" {
   description = "Whether to skip taking a final DB snapshot before deletion."
   type        = bool
-  default     = false
+  default     = true
+}
+variable "final_snapshot_identifier" {
+  type    = string
+  default = ""
 }
 
 variable "admin_username" {
@@ -132,4 +136,15 @@ variable "key_use_principals" {
 variable "key_management_principals" {
   description = "Principals allowed to manage the key (e.g., ARNs or services)"
   type        = list(string)
+}
+variable "cluster_identifier" {
+  default = "dev-aurora-cluster01"
+}
+variable "instance_count" {
+  default = 1
+  
+}
+variable "publicly_accessible" {
+  default = false
+  
 }

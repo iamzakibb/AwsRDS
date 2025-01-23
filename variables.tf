@@ -2,7 +2,7 @@
 variable "db_name" {
   description = "The name of the database to create."
   type        = string
-  default = "value"
+  default = "auroradb01"
 }
 
 variable "instance_identifier" {
@@ -26,7 +26,7 @@ variable "engine_version" {
 variable "instance_class" {
   description = "The instance type of the RDS instance."
   type        = string
-  default = "db.r4.large"
+  default = "db.t4g.large"
 }
 
 variable "allocated_storage" {
@@ -51,13 +51,13 @@ variable "backup_retention" {
 variable "multi_az" {
   description = "Whether to deploy a Multi-AZ RDS instance."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "monitoring_interval" {
   description = "The interval, in seconds, between enhanced monitoring metrics."
   type        = number
-  default = 0
+  default = 60
 }
 
 variable "performance_insights" {
@@ -69,26 +69,26 @@ variable "performance_insights" {
 variable "deletion_protection" {
   description = "Whether to enable deletion protection."
   type        = bool
-  default = true
+  default = false
 }
 
 variable "skip_final_snapshot" {
   description = "Whether to skip taking a final DB snapshot before deletion."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "admin_username" {
   description = "The master username for the database."
   type        = string
-  default = "admin"
+  default = "dbadmin"
 }
 
 variable "admin_password" {
   description = "The master password for the database."
   type        = string
   sensitive   = true
-  default = "appUser"
+  default = "adminuser123#"
 }
 
 variable "vpc_security_group_ids" {
@@ -124,8 +124,8 @@ variable "security_group_name" {
 variable "tags" {
   default = {
     "CI Environment"          = "development" # Change based on your environment
-    #"Information Classification" = "confidential"
-    #"AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
+    "Information Classification" = "confidential"
+    "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
 }
 # variable "vpc_id" {
@@ -168,4 +168,15 @@ variable "vpc_id" {
   description = "VPC ID where the security group will be created"
   default = "vpc-06b5b00028a2cce24"
   type        = string
+}
+variable "cluster_identifier" {
+  default = "dev-aurora-cluster01"
+}
+variable "instance_count" {
+  default = 1
+  
+}
+variable "publicly_accessible" {
+  default = false
+  
 }
