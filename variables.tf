@@ -124,8 +124,8 @@ variable "allowed_cidr_blocks" {
 variable "tags" {
   default = {
     "CI Environment"          = "development" # Change based on your environment
-    "Information Classification" = "confidential"
-    "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
+    #"Information Classification" = "confidential"
+    #"AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
 }
 # variable "vpc_id" {
@@ -155,10 +155,6 @@ variable "db_subnet_group_name" {
 #   default     = []
 # }
 
-# variable "key_management_principals" {
-#   description = "AWS principals allowed to manage the KMS key"
-#   type        = list(string)
-# }
 variable "kms_key_description" {
   default = "KMS key for RDS encryption"
 }
@@ -170,6 +166,6 @@ variable "subnet_group_name" {
 }
 variable "vpc_id" {
   description = "VPC ID where the security group will be created"
-  default ="vpc-0a85f22361b3b7557"
+  default = "vpc-06b5b00028a2cce24"
   type        = string
 }

@@ -1,7 +1,7 @@
+data "aws_caller_identity" "current" {}
 resource "aws_kms_key" "key" {
   description             = var.description
   enable_key_rotation     = true
-  multi_region            = false
   deletion_window_in_days = var.deletion_window_in_days
 
   policy = <<POLICY
@@ -10,7 +10,16 @@ resource "aws_kms_key" "key" {
   "Id": "kms-key-policy",
   "Statement": [
     {
-      "Sid": "UseAllow",
+      "Sid": "AllowAccountAccess",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      },
+      "Action": "kms:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowKeyUse",
       "Effect": "Allow",
       "Principal": {
         "AWS": ${jsonencode(var.key_use_principals)}
@@ -24,31 +33,6 @@ resource "aws_kms_key" "key" {
         "kms:ReEncrypt*"
       ],
       "Resource": "*"
-    },
-    {
-      "Sid": "ManageAllow",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": ${jsonencode(var.key_management_principals)}
-      },
-      "Action": [
-        "kms:Create*",
-        "kms:Describe*",
-        "kms:List*",
-        "kms:Enable*",
-        "kms:Put*",
-        "kms:Revoke*",
-        "kms:Update*",
-        "kms:Disable*",
-        "kms:Get*",
-        "kms:Delete*",
-        "kms:TagResource",
-        "kms:UntagResource",
-        "kms:ScheduleKeyDeletion",
-        "kms:CancelKeyDeletion",
-        "kms:ReplicateKey"
-      ],
-      "Resource": "*"
     }
   ]
 }
@@ -56,6 +40,9 @@ POLICY
 
   tags = var.tags
 }
+
+
+  
 
 resource "aws_db_instance" "this" {
   allocated_storage                = var.allocated_storage
@@ -79,6 +66,8 @@ resource "aws_db_instance" "this" {
   maintenance_window               = var.maintenance_window
   enabled_cloudwatch_logs_exports  = ["error", "general", "slowquery", "audit"]
   auto_minor_version_upgrade       = true
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.key.id
   monitoring_role_arn              = var.monitoring_role_arn
 
   tags = merge(
@@ -110,3 +99,27 @@ resource "aws_iam_role_policy_attachment" "rds_monitoring_policy" {
   role       = aws_iam_role.rds_monitoring_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
+
+# Add IAM role for KMS key management
+resource "aws_iam_role" "kms_management_role" {
+  name = "kms-management-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "kms_management_policy" {
+  role       = aws_iam_role.kms_management_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+}
+

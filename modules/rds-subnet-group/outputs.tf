@@ -15,3 +15,6 @@ output "subnet_group_arn" {
   value       = aws_db_subnet_group.this.arn
 }
 
+output "private_subnet_cidrs" {
+  value = [for i in range(var.number_of_subnets) : cidrsubnet(var.vpc_cidr, 2, i)]
+}

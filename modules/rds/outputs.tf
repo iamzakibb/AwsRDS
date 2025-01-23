@@ -24,4 +24,6 @@ output "performance_insights_kms_key_id" {
 output "kms_key_arn" {
   value = aws_kms_key.key.arn
 }
-
+output "kms_management_role_arn" {
+  value = aws_iam_role.kms_management_role.arn
+}

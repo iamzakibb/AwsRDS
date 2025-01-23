@@ -1,16 +1,15 @@
 # Create subnets
 resource "aws_subnet" "private" {
-  count                   = var.subnet_count
-  vpc_id                  = var.vpc_id
-  cidr_block              = cidrsubnet(var.vpc_cidr_block, var.new_subnet_prefix, count.index)
-  availability_zone       = element(data.aws_availability_zones.available.names, count.index)
-  map_public_ip_on_launch = false
+  count = length(var.private_subnet_cidrs)
+
+  vpc_id     = var.vpc_id
+  cidr_block = cidrsubnet(var.vpc_cidr, 2, count.index)
 
   tags = merge(
+    var.tags,
     {
-      Name = "${var.name}-private-subnet-${count.index}"
-    },
-    var.tags
+      "Name" = "private-subnet-${count.index + 1}"
+    }
   )
 }
 
