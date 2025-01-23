@@ -67,8 +67,6 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "instances" {
-  monitoring_interval = var.monitoring_interval
-  monitoring_role_arn = aws_iam_role.rds_monitoring_role.arn
   count                           = var.instance_count
   identifier                      = "${var.cluster_identifier}-${count.index + 1}"
   cluster_identifier              = aws_rds_cluster.this.id
@@ -78,6 +76,8 @@ resource "aws_rds_cluster_instance" "instances" {
   performance_insights_enabled    = var.performance_insights
   performance_insights_kms_key_id = aws_kms_key.key.arn
   auto_minor_version_upgrade = true
+  monitoring_interval = var.monitoring_interval
+  monitoring_role_arn = var.monitoring_role_arn
 
   tags = var.tags
 }
@@ -118,27 +118,27 @@ resource "aws_rds_cluster_instance" "instances" {
 #   )
 # }
 
-resource "aws_iam_role" "rds_monitoring_role" {
-  name = "rds-monitoring-role"
+# resource "aws_iam_role" "rds_monitoring_role" {
+#   name = "rds-monitoring-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "rds.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "rds.amazonaws.com"
+#         },
+#         Action = "sts:AssumeRole"
+#       }
+#     ]
+#   })
+# }
 
-resource "aws_iam_role_policy_attachment" "rds_monitoring_policy" {
-  role       = aws_iam_role.rds_monitoring_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
-}
+# resource "aws_iam_role_policy_attachment" "rds_monitoring_policy" {
+#   role       = aws_iam_role.rds_monitoring_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+# }
 
 # Add IAM role for KMS key management
 resource "aws_iam_role" "kms_management_role" {
@@ -162,4 +162,28 @@ resource "aws_iam_role_policy_attachment" "kms_management_policy" {
   role       = aws_iam_role.kms_management_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
+############################################################################################################
+resource "aws_iam_role" "rds_monitoring_role" {
+  name_prefix        = "rds-enhanced-monitoring-"
+  assume_role_policy = data.aws_iam_policy_document.rds_monitoring_policy.json
+}
 
+resource "aws_iam_role_policy_attachment" "rds_monitoring_attachment" {
+  role       = aws_iam_role.rds_monitoring_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+}
+
+data "aws_iam_policy_document" "rds_monitoring_policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["monitoring.rds.amazonaws.com"]
+    }
+  }
+}
