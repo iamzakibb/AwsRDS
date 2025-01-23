@@ -116,11 +116,11 @@ variable "security_group_name" {
   type        = string
   default     = "rds-security-group"
 }
-variable "allowed_cidr_blocks" {
-  description = "List of CIDR blocks allowed to access the database"
-  type        = list(string)
-  default     =  ["", ""] # Replace with your trusted CIDR ranges
-}
+# variable "allowed_cidr_blocks" {
+#   description = "List of CIDR blocks allowed to access the database"
+#   type        = list(string)
+#   default     =  ["", ""] # Replace with your trusted CIDR ranges
+# }
 variable "tags" {
   default = {
     "CI Environment"          = "development" # Change based on your environment

@@ -40,7 +40,8 @@ variable "number_of_subnets" {
   default = "2"
 }
 variable "vpc_cidr" {
-  type = string
   
-  
+}
+variable "availability_zones" {
+  # default = ["us-east-1a", "us-east-1b"]  # Specify multiple AZs
 }

@@ -1,6 +1,7 @@
 data "aws_vpc" "selected" {
   id = var.vpc_id
 }
+data "aws_availability_zones" "available" {}
 
 module "rds" {
   source               = "./modules/rds"
@@ -47,8 +48,10 @@ module "rds_subnet_group" {
   source             = "./modules/rds-subnet-group"
   name               = var.subnet_group_name
   vpc_id             = var.vpc_id # Reference existing VPC
-  # vpc_cidr = data.aws_vpc.selected.cidr_block
+  vpc_cidr = data.aws_vpc.selected.cidr_block
   vpc_cidr_block = data.aws_vpc.selected.cidr_block
+  availability_zones = data.aws_availability_zones.available.names
+  
   new_subnet_prefix  = 8              # Subnet prefix (adjust to match subnet size)
   subnet_count       = 2              # Create 2 subnets in different AZs
   tags               = var.tags

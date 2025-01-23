@@ -67,7 +67,7 @@ resource "aws_db_instance" "this" {
   enabled_cloudwatch_logs_exports  = ["error", "general", "slowquery", "audit"]
   auto_minor_version_upgrade       = true
   storage_encrypted = true
-  kms_key_id        = aws_kms_key.key.id
+  kms_key_id        = aws_kms_key.key.arn
   monitoring_role_arn              = var.monitoring_role_arn
 
   tags = merge(
