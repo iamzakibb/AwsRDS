@@ -128,11 +128,11 @@ variable "tags" {
     "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
   }
 }
-# variable "vpc_id" {
-#   description = "The ID of the VPC where the subnets will be created"
-#   type        = string
-#   default = "vpc-0f29e4c236e003fb8"
-# }
+variable "vpc_id" {
+  description = "The ID of the VPC where the subnets will be created"
+  type        = string
+  default = ""
+}
 
 variable "vpc_cidr_block" {
   description = "The CIDR block of the VPC"
@@ -164,11 +164,7 @@ variable "kms_key_description" {
 variable "subnet_group_name" {
   default = "rds-subnet-group"
 }
-variable "vpc_id" {
-  description = "VPC ID where the security group will be created"
-  default = "vpc-06b5b00028a2cce24"
-  type        = string
-}
+
 variable "cluster_identifier" {
   default = "dev-aurora-cluster01"
 }
