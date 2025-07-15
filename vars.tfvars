@@ -3,8 +3,8 @@ engine_version             = "14.6"
 db_name                    = "appdb"
 admin_username             = "dbadmin"
 admin_password             = "StrongP@ssword123"
-subnet_group_id          = ""
-security_group_id          = [""]
+subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
+security_group_id          = ["sg-07e4f5ad51341741b"]
 instance_class             = "db.r6g.large"
 instance_count             = 2
 

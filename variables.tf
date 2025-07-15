@@ -1,3 +1,6 @@
+variable "required_tags" {
+
+}
 variable "cluster_identifier" {
   description = "Unique name for the Aurora cluster"
   type        = string
