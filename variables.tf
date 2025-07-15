@@ -24,15 +24,6 @@ variable "admin_password" {
   sensitive   = true
 }
 
-variable "db_subnet_group_name" {
-  description = "Existing DB subnet group name"
-  type        = string
-}
-
-variable "vpc_security_group_ids" {
-  description = "List of existing security group IDs"
-  type        = list(string)
-}
 
 variable "instance_class" {
   description = "Instance class for each cluster instance"
@@ -94,7 +85,6 @@ variable "tags" {
   type        = map(string)
 }
 
-# Optional if you're referencing SG/subnet group by ID instead of name
 variable "subnet_group_id" {
   description = "ID of the existing DB subnet group"
   type        = string
