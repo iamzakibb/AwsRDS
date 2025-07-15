@@ -1,178 +1,106 @@
-
-variable "db_name" {
-  description = "The name of the database to create."
+variable "cluster_identifier" {
+  description = "Unique name for the Aurora cluster"
   type        = string
-  default = "auroradb01"
-}
-
-variable "instance_identifier" {
-  description = "The identifier for the RDS instance."
-  type        = string
-  default = "dev-aurora-postgres"
-}
-
-variable "engine" {
-  description = "The database engine to use (e.g., postgres, aurora)."
-  type        = string
-  default     = "aurora-postgresql"
 }
 
 variable "engine_version" {
-  description = "The engine version to use."
+  description = "Aurora PostgreSQL engine version"
   type        = string
-  default = "16.4"
 }
 
-variable "instance_class" {
-  description = "The instance type of the RDS instance."
+variable "db_name" {
+  description = "Initial database name (must not be a reserved word)"
   type        = string
-  default = "db.t4g.large"
-}
-
-variable "allocated_storage" {
-  description = "The amount of allocated storage in GB."
-  type        = number
-  default = 10
-}
-
-variable "max_allocated_storage" {
-  description = "The maximum allocated storage for autoscaling."
-  type        = number
-  default = 50
-}
-
-variable "backup_retention" {
-  description = "The number of days to retain backups."
-  type        = number
-  default     = 35
-}
-
-
-variable "multi_az" {
-  description = "Whether to deploy a Multi-AZ RDS instance."
-  type        = bool
-  default     = false
-}
-
-variable "monitoring_interval" {
-  description = "The interval, in seconds, between enhanced monitoring metrics."
-  type        = number
-  default = 60
-}
-
-variable "performance_insights" {
-  description = "Whether to enable Performance Insights."
-  type        = bool
-  default     = true
-}
-
-variable "deletion_protection" {
-  description = "Whether to enable deletion protection."
-  type        = bool
-  default = false
-}
-
-variable "skip_final_snapshot" {
-  description = "Whether to skip taking a final DB snapshot before deletion."
-  type        = bool
-  default     = true
 }
 
 variable "admin_username" {
-  description = "The master username for the database."
+  description = "Master username (not 'admin' or other reserved)"
   type        = string
-  default = "dbadmin"
 }
 
 variable "admin_password" {
-  description = "The master password for the database."
+  description = "Master user password"
   type        = string
   sensitive   = true
-  default = "adminuser123#"
+}
+
+variable "db_subnet_group_name" {
+  description = "Existing DB subnet group name"
+  type        = string
 }
 
 variable "vpc_security_group_ids" {
-  description = "A list of VPC security groups to associate with the RDS instance."
+  description = "List of existing security group IDs"
   type        = list(string)
-  default = [ "value" ]
 }
 
-
-
-
- variable "backup_window" {
-  description = "The daily time range during which backups are created."
-  type = string
-  default = "22:00-03:00"
-   
- }
- variable "maintenance_window" {
-  type = string
-  default = "sun:05:00-sun:06:00"
-   
- }
-variable "security_group_name" {
-  description = "Name of the RDS security group"
+variable "instance_class" {
+  description = "Instance class for each cluster instance"
   type        = string
-  default     = "rds-security-group"
-}
-# variable "allowed_cidr_blocks" {
-#   description = "List of CIDR blocks allowed to access the database"
-#   type        = list(string)
-#   default     =  ["", ""] # Replace with your trusted CIDR ranges
-# }
-variable "tags" {
-  default = {
-    "CI Environment"          = "development" # Change based on your environment
-    "Information Classification" = "confidential"
-    "AppServiceTag"           = "approved-value" # Replace 'approved-value' with a valid value
-  }
-}
-variable "vpc_id" {
-  description = "The ID of the VPC where the subnets will be created"
-  type        = string
-  default = ""
 }
 
-variable "vpc_cidr_block" {
-  description = "The CIDR block of the VPC"
-  type        = string
-  default = "value"
-}
-variable "db_subnet_group_name" {
-  description = "A DB subnet group to associate with the RDS instance."
-  type        = string
-  default = "rds-subnet-group"
-}
-# variable "monitoring_role_arn" {
-#   type        = string
-#   description = "IAM Role ARN for RDS enhanced monitoring"
-#   default = ""
-# }
-# variable "key_use_principals" {
-#   description = "AWS principals allowed to use the KMS key"
-#   type        = list(string)
-#   default     = []
-# }
-
-variable "kms_key_description" {
-  default = "KMS key for RDS encryption"
-}
-# variable "performance_insights_kms_key_id" {
-  
-# }
-variable "subnet_group_name" {
-  default = "rds-subnet-group"
-}
-
-variable "cluster_identifier" {
-  default = "dev-aurora-cluster01"
-}
 variable "instance_count" {
-  default = 1
-  
+  description = "Number of writer/reader instances"
+  type        = number
 }
-variable "publicly_accessible" {
-  default = false
-  
+
+variable "backup_retention" {
+  description = "Days to retain backups"
+  type        = number
+}
+
+variable "backup_window" {
+  description = "Preferred daily backup window"
+  type        = string
+}
+
+variable "maintenance_window" {
+  description = "Preferred weekly maintenance window"
+  type        = string
+}
+
+variable "performance_insights" {
+  description = "Enable Performance Insights?"
+  type        = bool
+}
+
+variable "kms_key_id" {
+  description = "ARN of the KMS key to use for encryption"
+  type        = string
+}
+
+variable "monitoring_interval" {
+  description = "Enhanced monitoring interval (seconds, 1–60)"
+  type        = number
+}
+
+variable "monitoring_role_arn" {
+  description = "ARN of the IAM role for enhanced monitoring"
+  type        = string
+}
+
+variable "skip_final_snapshot" {
+  description = "Skip final snapshot on deletion?"
+  type        = bool
+}
+
+variable "final_snapshot_identifier" {
+  description = "Identifier for the final snapshot (if skip_final_snapshot = false)"
+  type        = string
+}
+
+variable "tags" {
+  description = "Map of tags to apply to all resources"
+  type        = map(string)
+}
+
+# Optional if you're referencing SG/subnet group by ID instead of name
+variable "subnet_group_id" {
+  description = "ID of the existing DB subnet group"
+  type        = string
+}
+
+variable "security_group_id" {
+  description = "ID of the existing security group"
+  type        = string
 }

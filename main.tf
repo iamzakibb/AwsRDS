@@ -1,61 +1,113 @@
-data "aws_vpc" "selected" {
-  id = var.vpc_id
-}
+
 data "aws_availability_zones" "available" {}
-
-
-module "rds" {
-  source               = "./modules/rds"
-  allocated_storage = null
-  max_allocated_storage = null
-  cluster_identifier         = var.cluster_identifier
-  vpc_security_group_ids     = [module.rds_security_group.security_group_id]
-  instance_class             = var.instance_class
-  instance_count             = var.instance_count
-  db_name              = var.db_name
-  instance_identifier  = var.instance_identifier
-  engine               = var.engine
-  engine_version       = var.engine_version
-  backup_retention     = var.backup_retention
-  multi_az             = var.multi_az
-  monitoring_interval  = var.monitoring_interval
-  performance_insights = var.performance_insights
-  deletion_protection  = var.deletion_protection
-  skip_final_snapshot  = var.skip_final_snapshot
-  admin_username       = var.admin_username
-  admin_password       = var.admin_password
-  performance_insights_kms_key_id = module.rds.performance_insights_kms_key_id
-  db_subnet_group_name = module.rds_subnet_group.name
-  backup_window        = var.backup_window
-  publicly_accessible        = var.publicly_accessible
-  description = var.kms_key_description
-  maintenance_window   = var.maintenance_window
-    key_use_principals = [
-    module.rds.monitoring_role_arn               
-  ]
-  key_management_principals = [module.rds.kms_management_role_arn]
-  monitoring_role_arn = module.rds.monitoring_role_arn
-  # enable_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-  tags                 = var.tags
+data "aws_caller_identity" "current" {}
+data "aws_db_subnet_group" "existing" {
+  name = var.subnet_group_id
 }
-module "rds_security_group" {
-  source              = "./modules/security-group"
-  security_group_name = var.security_group_name
-  vpc_id              = var.vpc_id # Use the existing VPC ID
-  database_port       = 5432
-  
-  # allowed_cidr_blocks = var.allowed_cidr_blocks
-  tags                = var.tags
+data "aws_security_group" "existing" {
+  id = var.security_group_id
+}
+resource "aws_iam_role" "kms_secrets_admin" {
+  name = "KMSSecretsAdminRoleForDB"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          AWS = data.aws_caller_identity.arn
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+resource "aws_kms_key" "secrets_kms_key" {
+  description             = "KMS key for encrypting secrets"
+  enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+     
+      {
+        Sid       = "EnableRootPermissions",
+        Effect    = "Allow",
+        Principal = { AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root" },
+        Action    = "kms:*",
+        Resource  = "*"
+      },
+      # 2. Admin role permissions (explicitly include PutKeyPolicy)
+      {
+        Sid       = "AllowAdminAccess",
+        Effect    = "Allow",
+        Principal = { AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.kms_secrets_admin.name}"},
+        Action    = ["kms:Decrypt", "kms:DescribeKey"],
+        Resource  = "*"
+      },
+      # 3. Deny all others
+      {
+        Sid       = "DenyAllExceptRootAndAdmin",
+        Effect    = "Deny",
+        Principal = "*",
+        Action    = "kms:*",
+        Resource  = "*",
+        Condition = {
+          ArnNotLike = {
+            "aws:PrincipalArn" = [
+              "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root",
+              "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/*"
+            ]
+          }
+        }
+      }
+    ]
+  })
 }
 
-module "rds_subnet_group" {
-  source             = "./modules/rds-subnet-group"
-  name               = var.subnet_group_name
-  vpc_id             = var.vpc_id # Reference existing VPC
-  vpc_cidr = data.aws_vpc.selected.cidr_block
-  vpc_cidr_block = data.aws_vpc.selected.cidr_block
-  availability_zones = data.aws_availability_zones.available.names
-  new_subnet_prefix  = 8              # Subnet prefix (adjust to match subnet size)
-  subnet_count       = 2              # Create 2 subnets in different AZs
-  tags               = var.tags
+resource "aws_rds_cluster" "this" {
+  cluster_identifier              = var.cluster_identifier
+  engine                          = "aurora-postgresql"
+  engine_version                  = var.engine_version
+  database_name                   = var.db_name
+  master_username                 = var.admin_username
+  master_password                 = var.admin_password
+  db_subnet_group_name            = data.aws_db_subnet_group.existing.id
+  vpc_security_group_ids          = [data.aws_security_group.existing.id]
+
+  backup_retention_period         = var.backup_retention
+  preferred_backup_window         = var.backup_window
+  preferred_maintenance_window    = var.maintenance_window
+
+  storage_encrypted               = true
+  kms_key_id                      = aws_kms_key.secrets_kms_key.arn
+
+  deletion_protection             = true
+  skip_final_snapshot             = var.skip_final_snapshot
+  final_snapshot_identifier       = var.skip_final_snapshot ? null : var.final_snapshot_identifier
+
+  copy_tags_to_snapshot           = true
+  iam_database_authentication_enabled = true
+
+
+  tags = var.tags
+}
+
+resource "aws_rds_cluster_instance" "instances" {
+  count                           = var.instance_count
+  identifier                      = "${var.cluster_identifier}-${count.index + 1}"
+  cluster_identifier              = aws_rds_cluster.this.id
+  instance_class                  = var.instance_class
+  engine                          = aws_rds_cluster.this.engine
+  publicly_accessible             = false
+
+  performance_insights_enabled    = var.performance_insights
+  performance_insights_kms_key_id = aws_kms_key.secrets_kms_key.arn
+
+  # monitoring_interval             = var.monitoring_interval
+  # monitoring_role_arn             = var.monitoring_role_arn
+  auto_minor_version_upgrade      = true
+
+  tags = var.tags
 }
