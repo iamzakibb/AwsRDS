@@ -76,10 +76,10 @@ variable "tags" {
 
 variable "subnet_group_id" {
   description = "ID of the existing DB subnet group"
-  type        = string
+
 }
 
 variable "security_group_id" {
   description = "ID of the existing security group"
-  type        = string
+
 }
