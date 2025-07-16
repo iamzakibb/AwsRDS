@@ -110,7 +110,7 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.secrets_kms_key.arn
 
-  deletion_protection             = true
+  deletion_protection             = false
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.skip_final_snapshot ? null : var.final_snapshot_identifier
 
