@@ -58,20 +58,6 @@ variable "performance_insights" {
   type        = bool
 }
 
-variable "kms_key_id" {
-  description = "ARN of the KMS key to use for encryption"
-  type        = string
-}
-
-variable "monitoring_interval" {
-  description = "Enhanced monitoring interval (seconds, 1–60)"
-  type        = number
-}
-
-variable "monitoring_role_arn" {
-  description = "ARN of the IAM role for enhanced monitoring"
-  type        = string
-}
 
 variable "skip_final_snapshot" {
   description = "Skip final snapshot on deletion?"
