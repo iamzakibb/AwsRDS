@@ -17,7 +17,7 @@ resource "aws_iam_role" "kms_secrets_admin" {
       {
         Effect = "Allow",
         Principal = {
-          AWS = data.aws_caller_identity.arn
+          AWS = data.aws_caller_identity.current.arn
         },
         Action = "sts:AssumeRole"
       }
