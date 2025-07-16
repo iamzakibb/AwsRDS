@@ -7,6 +7,7 @@ data "aws_db_subnet_group" "existing" {
 data "aws_security_group" "existing" {
   id = var.security_group_id
 }
+
 resource "aws_iam_role" "kms_secrets_admin" {
   name = "KMSSecretsAdminRoleForDB"
 
