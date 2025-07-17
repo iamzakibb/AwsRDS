@@ -25,29 +25,54 @@ resource "aws_iam_role" "kms_secrets_admin" {
   })
 }
 resource "aws_kms_key" "secrets_kms_key" {
-  description             = "KMS key for encrypting secrets"
-  enable_key_rotation     = true
+  description         = "KMS key for encrypting secrets"
+  enable_key_rotation = true
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-     
+      # 1. Root account full permissions
       {
         Sid       = "EnableRootPermissions",
         Effect    = "Allow",
-        Principal = { AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root" },
-        Action    = "kms:*",
-        Resource  = "*"
+        Principal = {
+          AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root"
+        },
+        Action   = "kms:*",
+        Resource = "*"
       },
-      # 2. Admin role permissions (explicitly include PutKeyPolicy)
+
+      # 2. Admin role access
       {
         Sid       = "AllowAdminAccess",
         Effect    = "Allow",
-        Principal = { AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.kms_secrets_admin.name}"},
-        Action    = ["kms:Decrypt", "kms:DescribeKey"],
-        Resource  = "*"
+        Principal = {
+          AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.kms_secrets_admin.name}"
+        },
+        Action   = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ],
+        Resource = "*"
       },
-      # 3. Deny all others
+
+      # 3. RDS service principal permission (necessary for RDS to use the key)
+      {
+        Sid       = "AllowRDSServiceAccess",
+        Effect    = "Allow",
+        Principal = {
+          Service = "rds.amazonaws.com"
+        },
+        Action   = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ],
+        Resource = "*"
+      },
+
+      # 4. Deny all others
       {
         Sid       = "DenyAllExceptRootAndAdmin",
         Effect    = "Deny",
@@ -67,6 +92,7 @@ resource "aws_kms_key" "secrets_kms_key" {
   })
 }
 
+
 resource "aws_rds_cluster" "this" {
   cluster_identifier              = var.cluster_identifier
   engine                          = "aurora-postgresql"
@@ -84,7 +110,7 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.secrets_kms_key.arn
 
-  deletion_protection             = true
+  deletion_protection             = false
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.skip_final_snapshot ? null : var.final_snapshot_identifier
 
