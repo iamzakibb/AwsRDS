@@ -16,7 +16,7 @@ performance_insights       = true
 # monitoring_interval        = 60
 # monitoring_role_arn        = ""
 
-skip_final_snapshot        = false
+skip_final_snapshot        = true
 final_snapshot_identifier  = "dev-aurora-cluster-final"
 
 tags = {
