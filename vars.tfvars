@@ -1,4 +1,4 @@
-cluster_identifier         = "dev-aurora-cluster01"
+cluster_identifier         = "dev-aurora-cluster02"
 engine_version             = "14.6"
 db_name                    = "appdb"
 admin_username             = "dbadmin"
