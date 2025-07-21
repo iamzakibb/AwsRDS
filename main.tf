@@ -112,7 +112,7 @@ resource "aws_rds_cluster" "this" {
 
   deletion_protection             = false
   skip_final_snapshot             = var.skip_final_snapshot
-  final_snapshot_identifier       = var.skip_final_snapshot ? null : var.final_snapshot_identifier
+  # final_snapshot_identifier       = var.skip_final_snapshot ? null : var.final_snapshot_identifier
 
   copy_tags_to_snapshot           = true
   iam_database_authentication_enabled = true
