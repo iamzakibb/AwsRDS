@@ -53,10 +53,10 @@ variable "maintenance_window" {
   type        = string
 }
 
-variable "performance_insights" {
-  description = "Enable Performance Insights?"
-  type        = bool
-}
+# variable "performance_insights" {
+#   description = "Enable Performance Insights?"
+#   type        = bool
+# }
 
 
 variable "skip_final_snapshot" {
