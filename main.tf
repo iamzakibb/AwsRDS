@@ -24,76 +24,76 @@ resource "aws_iam_role" "kms_secrets_admin" {
     ]
   })
 }
-resource "aws_kms_key" "secrets_kms_key" {
-  description         = "KMS key for encrypting secrets"
-  enable_key_rotation = true
+# resource "aws_kms_key" "secrets_kms_key" {
+#   description         = "KMS key for encrypting secrets"
+#   enable_key_rotation = true
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      # 1. Root account full permissions
-      {
-        Sid       = "EnableRootPermissions",
-        Effect    = "Allow",
-        Principal = {
-          AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root"
-        },
-        Action   = "kms:*",
-        Resource = "*"
-      },
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       # 1. Root account full permissions
+#       {
+#         Sid       = "EnableRootPermissions",
+#         Effect    = "Allow",
+#         Principal = {
+#           AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root"
+#         },
+#         Action   = "kms:*",
+#         Resource = "*"
+#       },
 
-      # 2. Admin role access
-      {
-        Sid       = "AllowAdminAccess",
-        Effect    = "Allow",
-        Principal = {
-          AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.kms_secrets_admin.name}"
-        },
-        Action   = [
-          "kms:Decrypt",
-          "kms:DescribeKey"
-        ],
-        Resource = "*"
-      },
+#       # 2. Admin role access
+#       {
+#         Sid       = "AllowAdminAccess",
+#         Effect    = "Allow",
+#         Principal = {
+#           AWS = "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.kms_secrets_admin.name}"
+#         },
+#         Action   = [
+#           "kms:Decrypt",
+#           "kms:DescribeKey"
+#         ],
+#         Resource = "*"
+#       },
 
-      # 3. RDS service principal permission
-      {
-        Sid       = "AllowRDSServiceAccess",
-        Effect    = "Allow",
-        Principal = {
-          Service = "rds.amazonaws.com"
-        },
-        Action   = [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
-        ],
-        Resource = "*"
-      },
+#       # 3. RDS service principal permission
+#       {
+#         Sid       = "AllowRDSServiceAccess",
+#         Effect    = "Allow",
+#         Principal = {
+#           Service = "rds.amazonaws.com"
+#         },
+#         Action   = [
+#           "kms:Encrypt",
+#           "kms:Decrypt",
+#           "kms:GenerateDataKey*",
+#           "kms:DescribeKey"
+#         ],
+#         Resource = "*"
+#       },
 
-      # 4. Deny all others — except Root, Admin, and RDS service
-      {
-        Sid       = "DenyAllExceptRootAdminAndRDS",
-        Effect    = "Deny",
-        Principal = "*",
-        Action    = "kms:*",
-        Resource  = "*",
-        Condition = {
-          StringNotLike = {
-            "aws:PrincipalArn" = [
-              "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root",
-              "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/*"
-            ]
-          },
-          StringNotEqualsIfExists = {
-            "aws:PrincipalService" = "rds.amazonaws.com"
-          }
-        }
-      }
-    ]
-  })
-}
+#       # 4. Deny all others — except Root, Admin, and RDS service
+#       {
+#         Sid       = "DenyAllExceptRootAdminAndRDS",
+#         Effect    = "Deny",
+#         Principal = "*",
+#         Action    = "kms:*",
+#         Resource  = "*",
+#         Condition = {
+#           StringNotLike = {
+#             "aws:PrincipalArn" = [
+#               "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root",
+#               "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/*"
+#             ]
+#           },
+#           StringNotEqualsIfExists = {
+#             "aws:PrincipalService" = "rds.amazonaws.com"
+#           }
+#         }
+#       }
+#     ]
+#   })
+# }
 
 
 
@@ -111,8 +111,8 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window         = var.backup_window
   preferred_maintenance_window    = var.maintenance_window
 
-  storage_encrypted               = true
-  kms_key_id                      = aws_kms_key.secrets_kms_key.arn
+  # storage_encrypted               = true
+  # kms_key_id                      = aws_kms_key.secrets_kms_key.arn
 
   deletion_protection             = false
   skip_final_snapshot             = var.skip_final_snapshot
