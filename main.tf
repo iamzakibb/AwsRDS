@@ -113,8 +113,8 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window         = var.backup_window
   preferred_maintenance_window    = var.maintenance_window
 
-  # storage_encrypted               = true
-  # kms_key_id                      = aws_kms_key.secrets_kms_key.arn
+  storage_encrypted               = true
+  kms_key_id                      = aws_kms_key.secrets_kms_key.arn
 
   deletion_protection             = false
   skip_final_snapshot             = var.skip_final_snapshot
@@ -135,8 +135,8 @@ resource "aws_rds_cluster_instance" "instances" {
   engine                          = aws_rds_cluster.this.engine
   publicly_accessible             = false
 
-  # performance_insights_enabled    = var.performance_insights
-  # performance_insights_kms_key_id = aws_kms_key.secrets_kms_key.arn
+  performance_insights_enabled    = var.performance_insights
+  performance_insights_kms_key_id = aws_kms_key.secrets_kms_key.arn
 
   # monitoring_interval             = var.monitoring_interval
   # monitoring_role_arn             = var.monitoring_role_arn
