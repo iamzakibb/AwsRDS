@@ -56,7 +56,7 @@ resource "aws_kms_key" "secrets_kms_key" {
         Resource = "*"
       },
 
-      # 3. RDS service principal permission (necessary for RDS to use the key)
+      # 3. RDS service principal permission
       {
         Sid       = "AllowRDSServiceAccess",
         Effect    = "Allow",
@@ -72,25 +72,29 @@ resource "aws_kms_key" "secrets_kms_key" {
         Resource = "*"
       },
 
-      # 4. Deny all others
+      # 4. Deny all others — except Root, Admin, and RDS service
       {
-        Sid       = "DenyAllExceptRootAndAdmin",
+        Sid       = "DenyAllExceptRootAdminAndRDS",
         Effect    = "Deny",
         Principal = "*",
         Action    = "kms:*",
         Resource  = "*",
         Condition = {
-          ArnNotLike = {
+          StringNotLike = {
             "aws:PrincipalArn" = [
               "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:root",
               "arn:aws-us-gov:iam::${data.aws_caller_identity.current.account_id}:role/*"
             ]
+          },
+          StringNotEqualsIfExists = {
+            "aws:PrincipalService" = "rds.amazonaws.com"
           }
         }
       }
     ]
   })
 }
+
 
 
 resource "aws_rds_cluster" "this" {
