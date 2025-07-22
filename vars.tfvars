@@ -13,7 +13,7 @@ backup_retention           = 7
 backup_window              = "02:00-03:00"
 maintenance_window         = "Sun:03:00-Sun:04:00"
 
-performance_insights       = true
+# performance_insights       = true
 # monitoring_interval        = 60
 # monitoring_role_arn        = ""
 
