@@ -9,7 +9,7 @@ data "aws_security_group" "existing" {
 }
 
 resource "aws_iam_role" "kms_secrets_admin" {
-  name = "KMSSecretsAdminRoleForDB"
+  name = "KMSSecretsAdminRoleForDBTestEnv"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",

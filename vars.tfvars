@@ -1,4 +1,4 @@
-cluster_identifier         = "dev-aurora-cluster02"
+cluster_identifier         = "test-aurora-cluster02"
 
 engine_version             = "14.6"
 db_name                    = "appdb"
@@ -7,7 +7,7 @@ admin_password             = "StrongP##ssword123"
 subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
 security_group_id          = "sg-07e4f5ad51341741b"
 instance_class             = "db.r6g.large"
-instance_count             = 2
+instance_count             = 1
 
 backup_retention           = 7
 backup_window              = "02:00-03:00"
@@ -18,10 +18,10 @@ performance_insights       = true
 # monitoring_role_arn        = ""
 
 skip_final_snapshot        = true
-final_snapshot_identifier  = "dev-aurora-cluster-final"
+final_snapshot_identifier  = "test-aurora-cluster-final"
 
 tags = {
-  Environment = "dev"
+  Environment = "test"
   Project     = "aurora-poc"
 }
 
