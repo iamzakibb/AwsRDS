@@ -5,7 +5,7 @@ db_name                    = "appdb"
 admin_username             = "dbadmin"
 admin_password             = "StrongP##ssword123"
 subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
-security_group_id          = "sg-07e4f5ad51341741b"
+security_group_id          = "sg-0a00755380fd64daf"
 instance_class             = "db.r6g.large"
 instance_count             = 1
 
