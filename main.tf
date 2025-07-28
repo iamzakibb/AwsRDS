@@ -8,6 +8,20 @@ data "aws_security_group" "existing" {
   id = var.security_group_id
 }
 
+resource "aws_db_subnet_group" "rds_subnet_group_test_env" {
+  name       = "test-env-subnet-group"
+  description = "RDS subnet group for test environment"
+  subnet_ids = [
+    "subnet-03bb081ef2330c0a3",  
+    "subnet-012f9231b775b34d3"   
+  ]
+
+  tags = {
+    Name = "test-env-subnet-group"
+    Environment = "test"
+  }
+}
+
 resource "aws_iam_role" "kms_secrets_admin" {
   name = "KMSSecretsAdminRoleForDBTestEnv"
 
