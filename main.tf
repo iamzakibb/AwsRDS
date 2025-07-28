@@ -1,9 +1,9 @@
 
 data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
-data "aws_db_subnet_group" "existing" {
-  name = var.subnet_group_id
-}
+# data "aws_db_subnet_group" "existing" {
+#   name = var.subnet_group_id
+# }
 data "aws_security_group" "existing" {
   id = var.security_group_id
 }
@@ -120,7 +120,7 @@ resource "aws_rds_cluster" "this" {
   database_name                   = var.db_name
   master_username                 = var.admin_username
   master_password                 = var.admin_password
-  db_subnet_group_name            = data.aws_db_subnet_group.existing.id
+  db_subnet_group_name            = aws_db_subnet_group.rds_subnet_group_test_env.name
   vpc_security_group_ids          = [data.aws_security_group.existing.id]
 
   backup_retention_period         = var.backup_retention
