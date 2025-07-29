@@ -24,4 +24,4 @@ tags = {
   Environment = "test"
   Project     = "aurora-poc"
 }
-
+vpc_id = "vpc-0362a10068758712d"

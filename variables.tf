@@ -83,3 +83,6 @@ variable "security_group_id" {
   description = "ID of the existing security group"
 
 }
+variable "vpc_id" {
+  
+}
