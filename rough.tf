@@ -33,7 +33,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    cidr_blocks = data.aws_vpc.existing.cidr_block
+    # cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-067596a23bfce9a6"]
   }
 
@@ -42,7 +42,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-0be4a9d66bb7e3228"]
   }
 
@@ -51,7 +51,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-05f6ccc7d91078d8"]
   }
 
@@ -60,7 +60,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-0ccc965daf63ca665"]
   }
 
@@ -69,7 +69,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-0596ed447a7f1b896"]
   }
 
@@ -78,7 +78,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-0fb1c499684a53b0b"]
   }
 
@@ -87,7 +87,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-     cidr_blocks = data.aws_vpc.existing.cidr_block
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
     # security_groups = ["sg-01f269c1998ad5182"]
   }
 
@@ -96,7 +96,7 @@ resource "aws_security_group" "test_rds_sg" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = data.aws_vpc.existing.cidr_block
+    # cidr_blocks = data.aws_vpc.existing.cidr_block
   }
 
   tags = {
