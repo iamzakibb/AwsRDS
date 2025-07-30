@@ -1,6 +1,6 @@
 cluster_identifier         = "test-aurora-cluster02"
 
-engine_version             = "15.0"
+engine_version             = "16.6"
 db_name                    = "appdb"
 admin_username             = "dbadmin"
 admin_password             = "StrongP##ssword123"
