@@ -205,7 +205,7 @@ resource "aws_rds_cluster" "this" {
   master_password                 = var.admin_password
   db_subnet_group_name            = aws_db_subnet_group.rds_subnet_group_test_env.name
   vpc_security_group_ids          = [aws_security_group.test_rds_sg.id]
-
+  allow_major_version_upgrade     = true
   backup_retention_period         = var.backup_retention
   preferred_backup_window         = var.backup_window
   preferred_maintenance_window    = var.maintenance_window
