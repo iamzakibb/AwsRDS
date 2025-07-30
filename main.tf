@@ -24,7 +24,7 @@ data "aws_vpc" "existing" {
 resource "aws_security_group" "test_rds_sg" {
   name        = "postgres-sg-test"
   description = "Security group for test RDS PostgreSQL"
-  vpc_id      = "vpc-0f29e4c236e003fb8"  # Update if needed
+  vpc_id      = data.aws_vpc.existing.id  # Update if needed
 
   tags = {
     Name = "postgres-sg-test"
