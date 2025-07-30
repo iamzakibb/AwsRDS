@@ -31,7 +31,7 @@ resource "aws_security_group" "test_rds_sg" {
   }
 }
 
-# Ingress Rules - Allow from 7 other security groups on port 5432
+#Igress
 resource "aws_vpc_security_group_ingress_rule" "from_sg_1" {
   security_group_id            = aws_security_group.test_rds_sg.id
   # referenced_security_group_id = "sg-067596a23bfcec9a6"
