@@ -18,91 +18,91 @@ resource "aws_db_subnet_group" "rds_subnet_group_test_env" {
     Environment = "test"
   }
 }
-# data "aws_vpc" "existing" {
-#   id = var.vpc_id
-# }
+data "aws_vpc" "existing" {
+  id = var.vpc_id
+}
 
-# resource "aws_security_group" "test_rds_sg" {
-#   name        = "Postgres-SG-Test"
-#   description = "Security group for test RDS PostgreSQL"
-#   vpc_id      = data.aws_vpc.existing.id
+resource "aws_security_group" "test_rds_sg" {
+  name        = "Postgres-SG-Test"
+  description = "Security group for test RDS PostgreSQL"
+  vpc_id      = data.aws_vpc.existing.id
 
-#   # Ingress Rules (each rule defined separately)
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 1"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     # cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-067596a23bfce9a6"]
-#   }
+  # Ingress Rules (each rule defined separately)
+  ingress {
+    description     = "Allow PostgreSQL from SG 1"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    # cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-067596a23bfce9a6"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 2"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-0be4a9d66bb7e3228"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 2"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-0be4a9d66bb7e3228"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 3"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-05f6ccc7d91078d8"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 3"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-05f6ccc7d91078d8"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 4"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-0ccc965daf63ca665"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 4"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-0ccc965daf63ca665"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 5"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-0596ed447a7f1b896"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 5"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-0596ed447a7f1b896"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 6"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-0fb1c499684a53b0b"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 6"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-0fb1c499684a53b0b"]
+  }
 
-#   ingress {
-#     description     = "Allow PostgreSQL from SG 7"
-#     from_port       = 5432
-#     to_port         = 5432
-#     protocol        = "tcp"
-#     #  cidr_blocks = data.aws_vpc.existing.cidr_block
-#     # security_groups = ["sg-01f269c1998ad5182"]
-#   }
+  ingress {
+    description     = "Allow PostgreSQL from SG 7"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    #  cidr_blocks = data.aws_vpc.existing.cidr_block
+    # security_groups = ["sg-01f269c1998ad5182"]
+  }
 
-#   #Egress
-#   egress {
-#     from_port   = 5432
-#     to_port     = 5432
-#     protocol    = "tcp"
-#     # cidr_blocks = data.aws_vpc.existing.cidr_block
-#   }
+  #Egress
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    # cidr_blocks = data.aws_vpc.existing.cidr_block
+  }
 
-#   tags = {
-#     Name = "Postgres-SG-Test"
-#   }
-# }
+  tags = {
+    Name = "Postgres-SG-Test"
+  }
+}
 
 
 resource "aws_iam_role" "kms_secrets_admin" {
@@ -204,8 +204,8 @@ resource "aws_rds_cluster" "this" {
   master_username                 = var.admin_username
   master_password                 = var.admin_password
   db_subnet_group_name            = aws_db_subnet_group.rds_subnet_group_test_env.name
-  # vpc_security_group_ids          = [aws_security_group.test_rds_sg.id]
-  vpc_security_group_ids          = [var.security_group_id]
+  vpc_security_group_ids          = [aws_security_group.test_rds_sg.id]
+  # vpc_security_group_ids          = [var.security_group_id]
   apply_immediately = true
   allow_major_version_upgrade     = true
   backup_retention_period         = var.backup_retention
