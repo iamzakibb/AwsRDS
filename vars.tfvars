@@ -1,4 +1,4 @@
-cluster_identifier         = "test-aurora-cluster02"
+cluster_identifier         = "infobank-test"
 
 engine_version             = "16.6"
 db_name                    = "appdb"
