@@ -1,11 +1,11 @@
-cluster_identifier         = "test-aurora-cluster02"
+cluster_identifier         = "infobank-test"
 
 engine_version             = "16.6"
 db_name                    = "appdb"
 admin_username             = "dbadmin"
 admin_password             = "StrongP##ssword123"
-# subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
-security_group_id          = "sg-0a00755380fd64daf"
+subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
+security_group_id          = "sg-07e4f5ad51341741b"
 instance_class             = "db.r6g.large"
 instance_count             = 1
 

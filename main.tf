@@ -5,106 +5,12 @@ data "aws_caller_identity" "current" {}
 #   name = var.subnet_group_id
 # }
 
-resource "aws_db_subnet_group" "rds_subnet_group_test_env" {
-  name       = "test-env-subnet-group"
-  description = "RDS subnet group for test environment"
-  subnet_ids = [
-    "subnet-03bb081ef2330c0a3",  
-    "subnet-012f9231b775b34d3"   
-  ]
-
-  tags = {
-    Name = "test-env-subnet-group"
-    Environment = "test"
-  }
+data "aws_db_subnet_group" "existing" {
+  name = var.subnet_group_id
 }
-data "aws_vpc" "existing" {
-  id = var.vpc_id
+data "aws_security_group" "existing" {
+  id = var.security_group_id
 }
-resource "aws_security_group" "test_rds_sg" {
-  name        = "postgres-sg-test"
-  description = "Security group for test RDS PostgreSQL"
-  vpc_id      = data.aws_vpc.existing.id  # Update if needed
-
-  tags = {
-    Name = "postgres-sg-test"
-  }
-}
-
-#Igress
-resource "aws_vpc_security_group_ingress_rule" "from_sg_1" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  # referenced_security_group_id = "sg-067596a23bfcec9a6"
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_2" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  # referenced_security_group_id = "sg-0be4a9d66bb7e3228"
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_3" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  # referenced_security_group_id = "sg-056fdcccc7d91078d"
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_4" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  # referenced_security_group_id = "sg-0ccc965daf63ca665"
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_5" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  # referenced_security_group_id = "sg-0596ed447a7f1b896"
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_6" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  # referenced_security_group_id = "sg-0fb1c499684a5a3b0"
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "from_sg_7" {
-  security_group_id            = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  # referenced_security_group_id = "sg-01f269c1998ad5182"
-  from_port                    = 5432
-  to_port                      = 5432
-  ip_protocol                  = "tcp"
-}
-
-# Egress Rule 
-resource "aws_vpc_security_group_egress_rule" "allow_postgres_egress" {
-  security_group_id = aws_security_group.test_rds_sg.id
-  cidr_ipv4 = data.aws_vpc.existing.cidr_block
-  from_port         = 5432
-  to_port           = 5432
-  ip_protocol       = "tcp"
-}
-
-
 
 resource "aws_iam_role" "kms_secrets_admin" {
   name = "KMSSecretsAdminRoleForDBTestEnv"
@@ -204,8 +110,10 @@ resource "aws_rds_cluster" "this" {
   database_name                   = var.db_name
   master_username                 = var.admin_username
   master_password                 = var.admin_password
-  db_subnet_group_name            = aws_db_subnet_group.rds_subnet_group_test_env.name
-  vpc_security_group_ids          = [aws_security_group.test_rds_sg.id]
+  db_subnet_group_name            = data.aws_db_subnet_group.existing.id
+  vpc_security_group_ids          = [data.aws_security_group.existing.id]
+  # vpc_security_group_ids          = [var.security_group_id]
+  apply_immediately = true
   allow_major_version_upgrade     = true
   backup_retention_period         = var.backup_retention
   preferred_backup_window         = var.backup_window
@@ -227,7 +135,7 @@ resource "aws_rds_cluster" "this" {
 
 resource "aws_rds_cluster_instance" "instances" {
   count                           = var.instance_count
-  identifier                      = "${var.cluster_identifier}-${count.index + 1}"
+  identifier                      = "infobank"
   cluster_identifier              = aws_rds_cluster.this.id
   instance_class                  = var.instance_class
   engine                          = aws_rds_cluster.this.engine

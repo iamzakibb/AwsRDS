@@ -74,10 +74,10 @@ variable "tags" {
   type        = map(string)
 }
 
-# variable "subnet_group_id" {
-#   description = "ID of the existing DB subnet group"
+variable "subnet_group_id" {
+  description = "ID of the existing DB subnet group"
 
-# }
+}
 
 variable "security_group_id" {
   description = "ID of the existing security group"
