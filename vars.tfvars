@@ -1,7 +1,7 @@
 cluster_identifier         = "infobank-test"
 
 engine_version             = "16.6"
-db_name                    = "appdb"
+db_name                    = "infobank"
 admin_username             = "dbadmin"
 admin_password             = "StrongP##ssword123"
 # subnet_group_id            = "default-vpc-0f29e4c236e003fb8"
