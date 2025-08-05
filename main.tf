@@ -18,9 +18,7 @@ resource "aws_db_subnet_group" "rds_subnet_group_test_env" {
     Environment = "test"
   }
 }
-data "aws_vpc" "existing" {
-  id = var.vpc_id
-}
+
 
 resource "aws_security_group" "test_rds_sg" {
   name        = "Postgres-SG-Test"
