@@ -1,4 +1,4 @@
-cluster_identifier         = "infobank-test"
+cluster_identifier         = "infobank-postgresql-test"
 
 engine_version             = "16.6"
 db_name                    = "infobank"
